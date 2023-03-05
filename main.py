@@ -313,7 +313,13 @@ def main(args):
     # if args.head_wise:
     #     initialize_muitihead_quantization(model, device)
 
+    print("utils main process check : ", utils.is_main_process())
+    print("type check : args.resume == ''", args.resume == '')
+    print("type check : args.wbits or args.abits > 0", args.wbits > 0 or args.abits > 0)
+    print(f"arg check : {args.abits}, {args.wbits}")
+
     if args.resume == '' and (args.abits > 0 or args.wbits > 0) and utils.is_main_process():
+        print("initialize quantization : run model")
         initialize_quantization(data_loader_sampler, model, device, output_dir, sample_iters=1)
 
     
@@ -523,6 +529,7 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('DeiT training and evaluation script', parents=[get_args_parser()])
     args = parser.parse_args()
+    print(args)
     if args.output_dir:
         Path(args.output_dir +'/ckpt').mkdir(parents=True, exist_ok=True)
     main(args)
